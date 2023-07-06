@@ -1,0 +1,47 @@
+﻿@using APP.Session
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContext
+@{
+    var  session = httpContext.HttpContext.Session;
+    var cart=  session.Get<List<CartDetails>>("Cart");
+    int count = cart == null ? 0 : cart.Count;
+    double tot = 0;
+}
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <span class="lnr lnr-cart"></span>
+        <span class="badge badge-bg-1">@count</span>
+    </a>
+    <ul class="dropdown-menu cart-list s-cate">
+        @if (cart != null)
+        {
+            @foreach (var item in cart)
+            {
+                <li class="single-cart-list">
+                    <a href="#" class="photo"><img src="@item.Books.ImgUrl" class="cart-thumb" alt="image" /></a>
+                    <div class="cart-list-txt">
+                        <h6>@item.Books.Name</h6>
+                        <p>@item.Qty x - <span class="price">@item.Books.Price</span></p>
+                    </div><!--/.cart-list-txt-->
+                    <div class="cart-close">
+                        <span class="lnr lnr-cross"></span>
+                    </div><!--/.cart-close-->
+                </li><!--/.single-cart-list -->
+                tot = tot+ Convert.ToDouble ( item.Qty * item.Books.Price);
+            }
+            <li class="total">
+                <span>Total: Rs.@tot</span>
+                <button class="btn-cart pull-right" onclick="window.location.href='/Public/Home/ViewCart'">view cart</button>
+            </li>
+        }
+        else
+        {
+            <li class="total">
+                <span>Total: Rs 0.00</span>
+               
+            </li>
+        }
+
+
+    </ul>
+</li><!--/.dropdown-->

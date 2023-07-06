@@ -1,0 +1,86 @@
+﻿@{ ViewData["Title"] = "Order Page"; }
+
+<div class="container">
+    <div class="card card-light">
+        <div class="card-header">
+            <h3 class="card-title font-weight-bold">Order Information</h3>
+
+        </div>
+        <div class="card-body">
+            <table id="tblData" class="table table-bordered table-hover" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Order Date</th>
+                        <th>TotAmount</th>
+                        <th>Paid Amount</th>
+                        <th>Order Status</th>
+                        <th>Current Status</th>
+                        
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="action" style="display: none;">
+    <div class="text-center d-flex justify-content-center">
+
+       
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/bundles/dataTables.min.css">
+    <link rel="stylesheet" href="~/css/bundles/sweetalert2.min.css">
+    <link rel="stylesheet" href="~/css/bundles/toastr.min.css">
+}
+
+@section Scripts{
+    <script src="~/js/bundles/dataTables.min.js"></script>
+    <script src="~/js/bundles/sweetalert2.min.js"></script>
+    <script src="~/js/bundles/toastr.min.js"></script>
+    <script>"use strict";
+       
+        let userTable;
+      
+
+    $(function () {
+        userTable = app.module.controls.load();
+        
+    });
+
+    let app = {
+        module: {
+            controls: {
+                load: function () {
+                    return $("#tblData").DataTable({
+                        ajax: {
+                            url: "/Main/Print/GetAll",
+                        },
+                        scrollX: true,
+                        columns: [
+
+                            { data: "user", autoWidth: true },
+                            { data: "date", autoWidth: true },
+                            { data: "totAmt", autoWidth: true },
+                            { data: "paidAmt", autoWidth: true },
+                            { data: "orderStatus", autoWidth: true },
+                            { data: "curStatus", autoWidth: true },
+                           
+                        ],
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'print'
+                        ]
+                    });
+                },
+            },
+        },
+    };
+        
+    </script>
+
+
+}

@@ -1,0 +1,167 @@
+﻿@using System.Text.Json;
+@using Utility;
+@model Models.Orders
+@{
+    var orderStatus = ""; 
+}
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        color: black;
+    }
+
+    .required:after {
+        content: " *";
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="card card-light">
+        <div class="card-header">
+            <h3 class="card-title font-weight-bold">Order Information</h3>
+
+        </div>
+        <div class="card-body">
+            <table id="tblData" class="table table-bordered table-hover" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Book Name</th>
+                        <th>ISBN</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-gradient-lightblue">
+            <h3 class="card-title" style="font-weight:bold">Lock / Unlock Books.</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+
+                <input type="hidden" id="Id" asp-for="Id" value="@Model.Id" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="col-md-12 d-flex align-items-stretch flex-column">
+                    <div class="card bg-light d-flex flex-fill">
+                        <div class="card-header text-muted border-bottom-0">
+                            Order Information
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3>@Model.User.UserName</h3>
+                                    <h6><b>Date: </b>@Model.OrderDate </h6>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+
+                                        <li class="medium"><span class="fa-li"><i class="fas fa-lg fa-file-invoice-dollar"></i></span> Price :RS. @Model.TotAmount.00</li>
+                                        <li class="small"><span class="fa-li"></span> Paid Amount :RS. @Model.TotPaid.00</li>
+                                    </ul>
+                                </div>
+                                <div class="col-6 text-center">
+                                    @{ orderStatus = Model.OrderStatus == SD.Delivered ? "Deliverd" : (Model.OrderStatus == SD.OnProcess ? "On Delivery Process" : "Pending"); }
+                                    <div class="medium"><span class="fa-li"><i class="fas fa-lg fa-square-o"></i></span> Order Status:@orderStatus</div>
+                                </div>
+                            </div>
+                            <br />
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-right">
+
+                                <div class="row">
+                                    <div class="col">
+                                        @if (Model.OrderStatus == SD.OnProcess && Model.CurStatus == SD.Active)
+                                        {
+                                            <input type="hidden" asp-for="OrderStatus" value="@SD.Delivered" />
+                                            <button type="submit" class="btn btn-warning form-control">Mark As Delivered</button>
+                                        }
+                                        else if (Model.OrderStatus == SD.Pending && Model.CurStatus == SD.Active)
+                                        {
+                                            <input type="hidden" asp-for="OrderStatus" value="@SD.OnProcess" />
+                                            <button type="submit" class="btn btn-primary form-control">Add To Delivery Process</button>
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    </div>
+                                    <div class="col">
+                                        <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </form>
+        </div>
+    </div>
+</div>
+@section Styles{
+    <link rel="stylesheet" href="~/css/bundles/dataTables.min.css">
+    <link rel="stylesheet" href="~/css/bundles/sweetalert2.min.css">
+    <link rel="stylesheet" href="~/css/bundles/toastr.min.css">
+}
+
+@section Scripts{
+
+    <script src="~/js/bundles/dataTables.min.js"></script>
+    <script src="~/js/bundles/sweetalert2.min.js"></script>
+    <script src="~/js/bundles/toastr.min.js"></script>
+    <script>
+        "use strict";
+        let userTable;
+        var id = document.getElementById("Id").value;
+        console.log(id);
+        $(function () {
+            userTable = app.module.controls.load();
+        });
+        
+        let app = {
+            module: {
+                controls: {
+                    load: function () {
+                        return $("#tblData").DataTable({
+                            ajax: {
+                                url: "/Main/Order/GetOrderDetailAll?id="+id,
+                            },
+                            scrollX: true,
+                            columns: [
+                                {
+                                    data: "url",
+                                    render: function (data, type, row) {
+
+                                        return '<img src="' + data + '" alt="' + data + '"height="50" width="50"/>';;
+                                    },
+                                    autoWidth: true
+                                },
+                                { data: "name", autoWidth: true },
+                                { data: "isbn", autoWidth: true },
+                                { data: "qty", autoWidth: true },
+                            ],
+                        });
+                    },
+                },
+            },
+        };</script>
+
+
+}

@@ -1,0 +1,126 @@
+﻿@using System.Text.Json;
+@using Utility;
+@model Models.ViewModels.OrderVM
+@{
+   
+    var count = Model.OrderList == null ? 0 : Model.OrderList.Count();
+    var proStatus = "";
+}
+<style>
+   /* #aError {
+        pointer-events: none;
+    }*/
+    .no-hover {
+        position: relative;
+        opacity: 0.65 !important;
+        display: inline-block !important;
+    }
+</style>
+<section class="populer-products">
+    <div class="card card-solid">
+        <div class="card-body">
+            <!--cart-->
+            <form method="post">
+                <br />
+                @if (count > 0)
+                {
+
+                    <div class="backgroundWhiteBorder">
+                        <div class="container">
+                            <div class="card">
+                                <div class="col-6 text-right ">
+                                    <ul>
+                                        <li> <a asp-area="Public" asp-controller="Home" asp-action="Index" class="btn btn-outline-info btn-sm">Continue Shopping</a></li>
+                                    </ul>
+
+                                </div>
+                                <div class="card-header bg-dark text-light ml-0 row container " style="background-color:black !important; color:white !important; height:50px !important; ">
+                                    <div class="col-6" style="margin-top:10px !important;">
+                                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                                        Shopping Cart
+                                    </div>
+
+                                </div>
+                                <br />
+                                <div class="card-body">
+                                    @foreach (var item in Model.OrderList)
+                                    {
+                                        <div class="row">
+                                            <div class="d-none d-lg-block col-sm-3 col-lg-3 text-center py-2">
+                                                <h5><strong>@item.OrderDate</strong></h5>
+                                            </div>
+                                            <div class="col-sm-4 text-sm-center col-lg-4 text-lg-left">
+                                                <h5><strong>Rs @item.TotAmount.00</strong></h5>
+                                                <p>Paid Amount : <small>Rs.@item.TotPaid.00</small></p>
+                                            </div>
+                                            <div class="col-sm-4 text-sm-center col-lg-4 text-lg-left">
+                                                @{ proStatus = item.OrderStatus == SD.Delivered ? "Deliverd" : (item.OrderStatus == SD.OnProcess ? "Delivery Process" : "Pending"); }
+                                                <h5><strong>@proStatus </strong></h5>
+
+
+                                            </div>
+
+                                            <div class="col-sm-1  col-lg-1 text-lg-right row">
+                                                <div class="row">
+
+                                                    <div class="col-md-2 col-sm-2 col-lg-2 text-right">
+
+                                                        <button class="btn btn-info" asp-area="Public" asp-controller="Home" asp-action="ViewOrder" asp-route-id="@item.Id">
+                                                            <span class="lnr lnr-enter"></span>
+                                                        </button>
+                                                        @*<button class="btn btn-info" onclick="ViewOrder(@item.Id)">*@
+                                                        @*<button class="btn btn-info" onclick="ViewOrder('@("#return" + item.Id)')">
+                                                           <span class="lnr lnr-enter"></span>
+                                                        </button>
+                                                        <a id="@("return" + item.Id)"  asp-area="Public" asp-controller="Home" asp-action="ViewOrder" asp-route-Id="@item.Id" style="display:none">
+                                                        </a>*@
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        //tot = tot + Convert.ToDouble(item.Qty * item.Books.Price);
+                                        <hr />
+                                    }
+
+
+
+                                </div>
+                                <div class="card-footer row">
+
+                                    <div class="col-sm-0 col-md-6 col-lg-6">
+
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 col-md-6 ">
+
+                                        <a asp-area="Public" asp-controller="Home" asp-action="Index" class="btn btn-success form-control">Back To Home</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div>Empty order history.</div>
+                }
+            </form>
+        </div>
+
+    </div>
+</section>
+<br />
+
+@section Scripts{
+    <script>
+
+        function ViewOrder(v) {
+            console.log(v);
+            debugger;
+         /*   window.location.href = "/Public/Home/ViewOrder?Id=" + v;*/
+            $(v)[0].click();
+        };
+
+    </script>
+}

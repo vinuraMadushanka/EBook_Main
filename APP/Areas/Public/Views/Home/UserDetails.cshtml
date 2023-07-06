@@ -1,0 +1,81 @@
+﻿@using System.Text.Json;
+@using Utility;
+@model Models.ApplicationUser
+@{
+
+}
+<section class="populer-products">
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container " style="background-color:black !important; color:white !important; height:50px !important; ">
+                <div class="col-6" style="margin-top:10px !important;">
+                    <i class="fa fa-user"></i> &nbsp;
+                    Edit profile
+                </div>
+
+            </div>
+           
+            <br />
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="hidden" asp-for="CreatedBy" value="@Model.CreatedBy" />
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label asp-for="FirstName"></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input asp-for="FirstName" required class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label asp-for="LastName"></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input asp-for="LastName" required class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label asp-for="UserName"></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input asp-for="UserName" disabled class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label asp-for="Address"></label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea asp-for="Address" required class="form-control"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 ">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-warning form-control">Update</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <a asp-action="Index" class="btn btn-success form-control">Back to Home</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </section>
+    @section Scripts{
+        <partial name="_ValidationScriptsPartial" />
+    }

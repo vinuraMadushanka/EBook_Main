@@ -1,0 +1,186 @@
+﻿@using System.Text.Json;
+@using Utility;
+@model Models.ViewModels.CartVM
+@{
+    var cmntCount = Model.Comments == null ? 0 : Model.Comments.Count();
+ }
+@*<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <style>
+        [class*=sidebar-dark-] {
+            background-color: #002244;
+        }
+    </style>*@
+@*<link rel="stylesheet" href="~/css/bundles/style.min.css">*@
+<!--<link rel="stylesheet" href="~/template/plugins/fontawesome-free/css/all.min.css">-->
+<section class="populer-products">
+
+
+
+    <!-- Default box -->
+    <div class="card card-solid">
+        <div class="card-body">
+            <div class="row">
+                <hr />
+                <div class="col-12 col-sm-6">
+
+
+                    <div class="col-12">
+                        <img src="@Model.Books.ImgUrl" class="product-image" alt="Product Image">
+                    </div>
+
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="welcome-hero-txt">
+                        <h2>@Model.Books.Name</h2>
+                    </div><!--/.section-header-->
+                    <div class="bg-gray py-2 px-3 mt-4">
+                        <h2 class="mb-0">
+                            Rs: @Model.Books.Price .00
+                        </h2>
+
+                    </div>
+                    <br />
+                    <p>@Model.Books.Description</p>
+
+                    <hr>
+                    <div class="col-md-6">
+                        <h4>Quantity :</h4>
+                    </div>
+                    <form method="post">
+                          <input type="hidden" asp-for="Books.Id" />
+                          <input type="hidden" asp-for="Carts.Id" />
+                          <input type="hidden" asp-for="Books" />
+
+                        <div class="col-md-6">
+                            <input type="number" id="Qty" asp-for="CartDetails.Qty" required class="form-control" />
+                            <span asp-validation-for="CartDetails.Qty"></span>
+                        </div>
+
+                        <br />
+                        <br />
+                        <div class="col-md-12 mt-4">
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <button type="submit" onclick="return validateInput()" class="btn btn-primary btn-lg btn-flat col-md-12 col-sm-6">
+
+                                        <span class="lnr lnr-cart"></span>
+                                        Add to Cart
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="btn btn-default btn-lg btn-flat col-md-12 col-sm-6">
+                                        <span class="lnr lnr-bookmark"></span>
+                                        <a asp-area="Public" asp-controller="Home" asp-action="ViewCart">View Cart</a>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <br />
+                    <div class="mt-4 product-share">
+                        <a ><i class="fa fa-facebook-square"></i></a>
+                        <a ><i class="fa fa-instagram"></i></a>
+                        <a ><i class="fa fa-linkedin-square"></i></a>
+                        <a ><i class="fa fa-envelope"></i></a>
+
+                    </div>
+
+                </div>
+            </div>
+            <br />
+            <div class="row mt-4">
+                <nav class="w-100">
+                    <div class="nav nav-tabs" id="product-tab" role="tablist">
+                        <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab" href="#product-comments" role="tab" aria-controls="product-comments" aria-selected="true">Comments</a>
+                    </div>
+                </nav>
+                <br />
+                <div class="tab-content p-3" id="nav-tabContent">
+                  
+                    <div class="row">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <input type="hidden" asp-for="Books.Id" id="bkId" value="@Model.Books.Id" />
+                                    <textarea class="form-control" id="cmt"></textarea>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" onclick="return addComment()"> Add </button>
+                                </div>
+                            </div> 
+                       
+                            <div class="row">
+                                <div class="col-md-12">
+                                  
+                                    <div class="single-populer-products">
+                                        <div class="single-inner-populer-products">
+                                            <div class="single-inner-populer-product-txt">
+
+
+                                                @if (cmntCount > 0)
+                                                {
+                                                    @foreach (var item in Model.Comments)
+                                                    {
+                                                        <br />
+                                                        <h4>@item.User.UserName <span class="small"> @item.CmntDate </span></h4>
+                                                        <p>
+                                                            @item.Comment
+                                                        </p>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <p>There are no comments</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                        </form>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+
+</section><!--/.populer-products-->
+
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function validateInput() {
+            let qty = document.getElementById("Qty").value;
+            if (qty == "") {
+                //swal("Error", "Please Enter Qty", "error");
+                alert("Please Enter Qty");
+                return false;
+            }
+            else if (Number(qty)<=0) {
+                //swal("Error", "Please Enter valied qty", "error");
+                alert("Please Enter valied qty");
+                return false;
+            }
+            return true;
+        }
+        function addComment() {
+            let cmt = document.getElementById("cmt").value;
+            let bkId = document.getElementById("bkId").value;
+            console.log(cmt + "" + bkId);
+            window.location.href = "/Public/Home/AddCmt?cmt=" + cmt + "&bookId=" + bkId;
+
+        }
+    </script>
+}

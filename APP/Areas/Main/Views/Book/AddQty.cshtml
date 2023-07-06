@@ -1,0 +1,93 @@
+﻿@using System.Text.Json;
+@using Utility;
+@model Models.Books
+@{ }
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        color: black;
+    }
+
+    .required:after {
+        content: " *";
+        color: red;
+    }
+</style>
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-gradient-lightblue">
+            <h3 class="card-title" style="font-weight:bold">Lock / Unlock Books.</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <input type="hidden" asp-for="ImgUrl" value="@Model.ImgUrl" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="col-md-12 d-flex align-items-stretch flex-column">
+                    <div class="card bg-light d-flex flex-fill">
+                        <div class="card-header text-muted border-bottom-0">
+                            Book Information
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <img src="@Model.ImgUrl" alt="user-avatar" width="200" class="img-bordered img-fluid">
+                                </div>
+                                <div class="col-6">
+                                    <h3>@Model.Name</h3>
+                                    <h6><b>Author: </b>@Model.Author </h6>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="required" asp-for="Qty">Quantity</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="number" asp-for="Qty" class="form-control" />
+                                            <span asp-validation-for="Qty" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <br />
+                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                        <li class="medium"><span class="fa-li"><i class="fas fa-lg fa-book-open"></i></span> ISBN No: @Model.ISBN</li>
+                                        <li class="medium"><span class="fa-li"><i class="fas fa-lg fa-file-invoice-dollar"></i></span> Price :RS. @Model.Price.00</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-right">
+
+                                <div class="row">
+                                    <div class="col">
+                                    
+                                        <button type="submit" class="btn btn-warning form-control">Update Qty</button> 
+
+                                    </div>
+                                    <div class="col">
+                                        <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+}
